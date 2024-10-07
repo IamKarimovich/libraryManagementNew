@@ -1,6 +1,7 @@
 package library.malik.com.Library.management.project.business.concretes;
 
 import library.malik.com.Library.management.project.business.abstracts.LibrarianService;
+import library.malik.com.Library.management.project.core.exceptions.ResourceNotFoundException;
 import library.malik.com.Library.management.project.dataAccess.abstracts.LibrarianRepository;
 import library.malik.com.Library.management.project.entity.Librarian;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class LibrarianManager implements LibrarianService {
 
     @Override
     public Librarian findById(Long id) {
-        Optional<Librarian> librarian = librarianRepository.findById(id);
-        return librarian.orElse(null);
+        return librarianRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Librarian with ID " + id + " not found"));
     }
 
     @Override

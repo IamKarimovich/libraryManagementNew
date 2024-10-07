@@ -1,6 +1,7 @@
 package library.malik.com.Library.management.project.business.concretes;
 
 import library.malik.com.Library.management.project.business.abstracts.BorrowingService;
+import library.malik.com.Library.management.project.core.exceptions.ResourceNotFoundException;
 import library.malik.com.Library.management.project.dataAccess.abstracts.BookRepository;
 import library.malik.com.Library.management.project.dataAccess.abstracts.BorrowingRepository;
 import library.malik.com.Library.management.project.dataAccess.abstracts.StudentRepository;
@@ -26,11 +27,14 @@ public class BorrowedManager implements BorrowingService {
 
     @Override
     public Borrowing borrowBook(Long studentId, Long bookId) {
-        Student student = studentRepository.findById(studentId).orElseThrow();
-        Book book = bookRepository.findById(bookId).orElseThrow();
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Student with ID " + studentId + " not found"));
+
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResourceNotFoundException("Book with ID " + bookId + " not found"));
 
         if (!book.isAvailable()) {
-            throw new RuntimeException("Book is not available for borrowing");
+            throw new RuntimeException("Book " + book.getTitle() + " is not available for borrowing");
         }
 
         Borrowing borrowing = new Borrowing();
@@ -58,7 +62,9 @@ public class BorrowedManager implements BorrowingService {
 
     @Override
     public void returnBook(Long borrowingId) {
-        Borrowing borrowing = borrowingRepository.findById(borrowingId).orElseThrow();
+        Borrowing borrowing = borrowingRepository.findById(borrowingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Borrowing with ID " + borrowingId + " not found"));
+
         borrowing.setReturnDate(LocalDate.now());
         borrowing.setReturned(true);
 

@@ -11,4 +11,5 @@ public interface BookService {
     void updateBook(Book book);
     void deleteBook(Long id);
     Book findById(Long id);
+    // void uploadBookImage(Long bookId, MultipartFile file); // This method is not needed anymore
 }

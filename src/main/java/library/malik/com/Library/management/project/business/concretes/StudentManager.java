@@ -1,13 +1,13 @@
 package library.malik.com.Library.management.project.business.concretes;
 
 import library.malik.com.Library.management.project.business.abstracts.StudentService;
+import library.malik.com.Library.management.project.core.exceptions.ResourceNotFoundException;
 import library.malik.com.Library.management.project.dataAccess.abstracts.StudentRepository;
 import library.malik.com.Library.management.project.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentManager implements StudentService {
@@ -36,7 +36,7 @@ public class StudentManager implements StudentService {
 
     @Override
     public Student findById(Long id) {
-        Optional<Student> student = studentRepository.findById(id);
-        return student.orElse(null);
+        return studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student with ID " + id + " not found"));
     }
 }

@@ -1,6 +1,5 @@
 package library.malik.com.Library.management.project.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 

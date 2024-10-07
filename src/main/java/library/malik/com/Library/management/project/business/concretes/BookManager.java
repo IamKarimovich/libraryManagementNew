@@ -1,13 +1,14 @@
 package library.malik.com.Library.management.project.business.concretes;
 
 import library.malik.com.Library.management.project.business.abstracts.BookService;
+import library.malik.com.Library.management.project.core.exceptions.ResourceNotFoundException;
 import library.malik.com.Library.management.project.dataAccess.abstracts.BookRepository;
 import library.malik.com.Library.management.project.entity.Book;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookManager implements BookService {
@@ -41,7 +42,7 @@ public class BookManager implements BookService {
 
     @Override
     public Book findById(Long id) {
-        Optional<Book> book = bookRepository.findById(id);
-        return book.orElse(null);
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book with ID " + id + " not found"));
     }
 }
